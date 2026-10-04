@@ -1,0 +1,9 @@
+# Documentación de los datos
+
+## Fuente
+
+- Autor: Hectors K, Vanspeybrouck D, Plets J, Bouckaert Q, De Waele W
+- URL: https://doi.org/10.17605/OSF.IO/6Y5SD
+- Los 41 registros del CSV corresponden a observaciones con falla de las Tablas A1 (TD) y A2 (RD) del artículo.
+- Los valores fueron transcritos de la tabla publicada. No se generaron artificialmente.
+- El artículo indica que los run-outs se detuvieron en 10^7 ciclos sin falla; por eso no se asignan como fallas exactas en el dataset supervisado.
