@@ -1,0 +1,10 @@
+metric,value
+records,41.0
+missing_values,0.0
+duplicates,0.0
+stress_min_MPa,224.86
+stress_max_MPa,311.15
+N_min_cycles,36145.0
+N_max_cycles,7292489.0
+mean_log10_N,5.802216643157648
+pearson_stress_vs_logN,-0.8978620608956085
