@@ -7,46 +7,78 @@ Predicción de la vida a fatiga de elementos de acero mediante Machine Learning
 - Fabrizio Valentino Almandoz Castañeda
 
 
-## Objetivo de esta entrega
-Realizar el análisis exploratorio de datos y definir el plan algorítmico para un problema de regresión de vida a fatiga.
+# Predicción de vida a fatiga de aceros mediante Machine Learning
 
-## Fuente de datos
-Se utiliza un subconjunto de 41 observaciones experimentales de falla por carga de amplitud constante de acero A37JC, equivalente al S235, reproducidas de las Tablas A1 y A2 del artículo:
+Proyecto orientado a la predicción de la vida a fatiga de materiales de acero mediante modelos físico-empíricos y algoritmos de Machine Learning.
 
-Hectors, K., Vanspeybrouck, D., Plets, J., Bouckaert, Q., & De Waele, W. (2023).
-Open-Access Experiment Dataset for Fatigue Damage Accumulation and Life Prediction Models.
-Metals, 13(3), 621. DOI: 10.3390/met13030621.
+## Objetivo
 
-El artículo indica que el material A37JC es equivalente al S235 actual y que los ensayos se realizaron mediante flexión rotatoria. El conjunto completo de datos se encuentra en el repositorio abierto indicado por los autores:
-https://doi.org/10.17605/OSF.IO/6Y5SD
+Comparar el modelo tradicional de **Basquin** con diferentes modelos de Machine Learning para predecir el número de ciclos hasta la falla `N` a partir de datos experimentales de fatiga.
 
-## Delimitación
-Se estudia fatiga de alto ciclo bajo carga de amplitud constante. La variable objetivo es el número de ciclos hasta la falla, Nf, modelado inicialmente como log10(Nf).
+La variable objetivo utilizada es:
 
-## Importante sobre los run-outs
-Los ensayos que alcanzaron 10^7 ciclos sin falla son observaciones censuradas (run-out). No se convierten artificialmente en una falla a 10^7 ciclos en el conjunto supervisado inicial. Para la T2 se trabaja con las 41 observaciones de falla reproducidas de las tablas publicadas.
+`log10(N)`
 
-## Variables
-- stress_amplitude_MPa: amplitud de esfuerzo.
-- frequency_RPM: frecuencia de ensayo.
-- direction: dirección de extracción del material (TD/RD).
-- cycles_to_failure: número de ciclos hasta la falla.
-- log10_N: transformación de la variable objetivo.
+donde `N` representa el número de ciclos observados hasta la falla.
 
-## Plan algorítmico
-1. Modelo base: Ridge Regression.
-2. Modelo no lineal: Random Forest Regressor.
-3. Modelo no lineal: Gradient Boosting Regressor.
-4. Red neuronal: NO se recomienda como modelo principal con solo 41 fallas en este subconjunto; se reconsiderará si se incorpora el dataset completo.
+## Materiales analizados
 
-## Métricas
-- MAE
-- RMSE
-- R²
+El estudio considera datos experimentales correspondientes a dos tipos de acero:
 
-## Ejecución
-```bash
-pip install -r requirements.txt
-python src/analisis_T2.py
-```
+- **A37JC/S235**
+- **42CrMo4+QT**
+
+La base de datos fue sometida a un proceso de auditoría y depuración para diferenciar ensayos de falla, grietas, interrupciones y puntos auxiliares.
+
+## Modelos evaluados
+
+Se compararon los siguientes modelos:
+
+- Ley de Basquin
+- Regresión Ridge
+- Random Forest
+- Regresión lineal considerando frecuencia
+- Random Forest considerando frecuencia
+
+La relación de Basquin utilizada se expresa como:
+
+`log10(N) = a + b · log10(σa)`
+
+donde `σa` corresponde a la amplitud de esfuerzo en MPa.
+
+## Metodología
+
+El análisis comprende:
+
+1. Auditoría y depuración de los datos experimentales.
+2. Análisis estadístico descriptivo.
+3. Análisis de correlación entre esfuerzo, frecuencia y vida a fatiga.
+4. Construcción de curvas S-N.
+5. Ajuste del modelo de Basquin para cada material.
+6. Entrenamiento de modelos de Machine Learning.
+7. Validación cruzada mediante KFold y GroupKFold.
+8. Comparación mediante las métricas MAE, RMSE y R².
+
+## Principales resultados
+
+Para **A37JC/S235**, la regresión lineal incorporando la frecuencia presentó el menor MAE:
+
+`MAE = 0.165 log10(N)`
+
+mientras que Basquin obtuvo:
+
+`MAE = 0.180 log10(N)`
+
+Para **42CrMo4+QT**, Basquin presentó el mejor desempeño:
+
+`MAE = 0.232 log10(N)`
+
+superando a Random Forest, Ridge y los modelos que incorporaron la frecuencia.
+
+## Conclusión
+
+Los resultados muestran que los modelos de Machine Learning no superan de manera consistente al modelo tradicional de Basquin.
+
+Basquin constituye un **baseline físico sólido** para la predicción de vida a fatiga, mientras que los modelos de Machine Learning pueden utilizarse como herramientas complementarias. Su desempeño depende de la calidad de los datos, la cantidad de observaciones, la selección de variables y la estrategia de validación.
+
 
